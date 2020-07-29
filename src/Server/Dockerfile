@@ -29,6 +29,9 @@ RUN mkdir -p /mnt/output-server
 ADD requirements.txt .
 RUN pip install -r requirements.txt
 
+RUN pip3 install git+https://github.com/Zackory/bullet3.git
+RUN pip3 install git+https://github.com/Healthcare-Robotics/assistive-gym.git
+
 # Copy Source Code
 COPY . .
 
