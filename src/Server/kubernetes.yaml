@@ -57,7 +57,7 @@ spec:
       containers:
       - name: server # Name of our container, e.g. `kubectl logs -c c-rw-...`
         image: roadwork.io/rw-server:latest
-        imagePullPolicy: Never # in production PullIfNotPresent or Always
+        imagePullPolicy: Always # in production PullIfNotPresent or Always
         ports:
         - containerPort: 3000
         env:
