@@ -142,5 +142,8 @@ cd <REPO ROOT>/src/Experiments/rllib/cartpole
 # Set roadwork server url environment variable with EXTERNAL-IP
 export ROADWORK_SERVER_URL=https://<EXTERNAL-IP>
 
+# test server example
+# export ROADWORK_SERVER_URL=https://20.190.28.131:443
+
 python3 train.py
 ```
