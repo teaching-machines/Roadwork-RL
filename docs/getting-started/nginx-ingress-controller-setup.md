@@ -19,6 +19,13 @@ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm install nginx stable/nginx-ingress -f src/Server/dapr/nginx/annotations.yaml -n default
 ```
 
+### Scale out Nginx ingress controller
+
+```bash
+# Scaling out to 4
+helm upgrade nginx stable/nginx-ingress --set controller.replicaCount=4 -f src/Server/dapr/nginx/annotations.yaml
+```
+
 ### Setup TLS termination with certificate
 
 ```bash
