@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.7
 
 WORKDIR /app
 
@@ -28,6 +28,9 @@ RUN mkdir -p /mnt/output-server
 # Download dependencies
 ADD requirements.txt .
 RUN pip install -r requirements.txt
+
+# HACKHACK: requirements.txt doesn't install gym[box2d]
+RUN pip install gym[box2d]==0.17.2
 
 # Copy Source Code
 COPY . .
