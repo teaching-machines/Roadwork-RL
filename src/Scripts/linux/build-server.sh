@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -z $1 -o -z $2 ]; then
   echo "Usage: ./build.sh <DOCKER_FILE_LOCATION> <NAME>"
-  echo "Example: ./build.sh Server/ roadwork.io/sim-server"
+  echo "Example: ./build.sh Server/ roadwork/rw-server"
   exit 1
 fi
 

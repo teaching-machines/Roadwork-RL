@@ -13,7 +13,8 @@ from roadwork.json import Unserializer
 
 import uuid
 
-#asgiref
+import logging
+logger = logging.getLogger('RW-Client')
 
 class ClientDapr:
     metadata = { 'render.modes': [ 'human' ] }
@@ -25,7 +26,7 @@ class ClientDapr:
         self.init_roadwork_client()
 
     def init_roadwork_client(self):
-        # 'https://20.190.28.131:443'
+
         rw_server_url = os.environ.get('ROADWORK_SERVER_URL')
         if rw_server_url:
             self.client_session.headers = {'Host': 'roadwork'}
@@ -42,8 +43,6 @@ class ClientDapr:
     def _create(self, envId, **kwargs):
         base_dict = { 'env_id': envId }
         base_dict.update(**kwargs)
-
-        print(base_dict, flush=True)
 
         self.client_session.post(f'{self._default_url}/SimCreate', json=base_dict)
         self.action_space = self._action_space_info()
@@ -67,13 +66,23 @@ class ClientDapr:
         for _ in range(0, 3):
             try:
                 r = self.client_session.post(f'{self._default_url}/SimStep', json={ 'action': action })
-                if len(r.json()) == 0:
+
+                if r.status_code == 502:
+                  print("Bad Gateway - You may need to scale out the ingress controller through kubectl scale --replicas=2 nginx-nginx-ingress-controller", flush=True)
+                  break
+
+                r_json = r.json()
+
+                if len(r_json) == 0:
+                    print("length was 0", flush=True)
                     return []
-                obs, reward, done, info = r.json()
+
+                obs, reward, done, info = r_json
                 return [ obs, reward, done, info ]
             except Exception as ex:
-                print (repr(ex), flush=True)
-                time.sleep(1)
+                logger.exception('STEP_ERROR')
+                # time.sleep(1)
+      
         return []
 
     def _monitor_start(self, episode_interval):

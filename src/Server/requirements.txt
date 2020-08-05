@@ -7,6 +7,7 @@ six==1.14.0
 tox==3.15.0
 gym==0.17.2
 gym_unity==0.18.0
+gym[box2d]==0.17.2
 
 # Install to ensure Dapr compatibility (Dapr depends on this)
 grpcio==1.26.0

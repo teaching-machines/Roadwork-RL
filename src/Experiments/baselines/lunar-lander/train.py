@@ -11,7 +11,7 @@ from stable_baselines.common.vec_env import SubprocVecEnv
 
 def env_create():
     env = ClientDapr("ActorOpenAI")
-    env.create("LunarLander-v2")
+    env.create("CartPole-v1")
     print(f"[Client] Created Sim {env.actor_id}", flush=True)
 
     return env

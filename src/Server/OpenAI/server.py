@@ -60,15 +60,11 @@ class ActorOpenAI(Actor, RoadworkActorInterface):
         return res
         
     async def sim_observation_space(self) -> object:
-        print(self.env.observation_space, flush=True)
-        print(self.env.observation_space.high, flush=True)
-        print(self.env.observation_space.low, flush=True)
         res = Serializer.serializeMeta(self.env.observation_space)
         return res
 
     async def sim_create(self, data) -> None:
         """An actor method to create a sim environment."""
-        print(data, flush=True)
         env_id = data['env_id']
 
         # vector_idx = data['vector_index']
@@ -78,6 +74,7 @@ class ActorOpenAI(Actor, RoadworkActorInterface):
         # await asyncio.sleep(sleep)
 
         print(f'Creating sim with value {env_id}', flush=True)
+
         try:
             self.env = gym.make(env_id)
             # if seed:
@@ -90,8 +87,7 @@ class ActorOpenAI(Actor, RoadworkActorInterface):
             logger.exception('')
             raise Exception(e)
         except:
-            print(sys.exc_info())
-            traceback.print_tb(sys.exc_info()[2])
+            logger.exception('')
             raise
 
     async def sim_reset(self) -> object:
