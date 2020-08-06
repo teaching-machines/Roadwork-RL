@@ -1,5 +1,8 @@
 # Roadwork-RL
 src/Server/redis.yaml
+output-server/
+src-dapr/output
+src/output
 
 # Dapr
 components/
@@ -206,8 +209,3 @@ public/
 
 # DynamoDB Local files
 .dynamodb/
-
-# Custom
-output-server/
-src-dapr/output
-src/output

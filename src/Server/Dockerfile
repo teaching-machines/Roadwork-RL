@@ -13,30 +13,33 @@ RUN apt-get update \
        xorg-dev \
        libsdl2-dev \
        swig \
+       python3-pip \
+       python3-setuptools \
        cmake \
        python-opengl \
        dos2unix
 
-# # Virtual Frame Buffer - needed as X11 display target where no monitor exists.
-# RUN apt-get -y install xvfb x11vnc x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic x11-apps
-# ADD docker/xvfb_init.sh /etc/init.d/xvfb
-# RUN chmod a+x /etc/init.d/xvfb
-
 # Output Dir
 RUN mkdir -p /mnt/output-server
 
-# Download dependencies
+# Upgrade pip
+RUN /usr/bin/python3 -m pip install --upgrade pip
+
+# Download Roadwork Server Dependencies
 ADD requirements.txt .
 RUN pip install -r requirements.txt
 
-# Copy Source Code
+# Copy Source Code to WORKDIR
 COPY . .
 
-# Fix line endings on our start script
-RUN dos2unix docker/start.sh
+# Download and Install Sim Dependencies
+RUN dos2unix docker/install_sim_dependencies.sh
+RUN chmod a+xr docker/install_sim_dependencies.sh
+RUN ./docker/install_sim_dependencies.sh
 
 # Main Entry
-RUN chmod a+xr docker/start.sh
+RUN dos2unix docker/entrypoint.sh
+RUN chmod a+xr docker/entrypoint.sh
 
-CMD [ "./docker/start.sh" ]
-# CMD [ "python", "server.py" ]
+ENTRYPOINT ["./docker/entrypoint.sh"]
+CMD [ "uvicorn", "--port 3000 main:app" ]
