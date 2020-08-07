@@ -63,25 +63,25 @@ class ClientDapr:
         if isinstance(action, np.ndarray):
             action = action.tolist()
 
-        for _ in range(0, 3):
+        for _ in range(0, 5):
             try:
                 r = self.client_session.post(f'{self._default_url}/SimStep', json={ 'action': action })
-
-                if r.status_code == 502:
-                  print("Bad Gateway - You may need to scale out the ingress controller through kubectl scale --replicas=2 nginx-nginx-ingress-controller", flush=True)
-                  break
+                if not r.ok:
+                    logger.warn(f'error response - status_code : {r.status_code} - {r.reason}')
+                    continue
 
                 r_json = r.json()
 
-                if len(r_json) == 0:
-                    print("length was 0", flush=True)
-                    return []
+                if len(r_json) < 4:
+                    logger.warn(f'error response - less arguments: {r.text}')
+                    continue
 
                 obs, reward, done, info = r_json
                 return [ obs, reward, done, info ]
             except Exception as ex:
-                logger.exception('STEP_ERROR')
-                # time.sleep(1)
+                logger.exception(ex)
+
+            time.sleep(0.5)
       
         return []
 
