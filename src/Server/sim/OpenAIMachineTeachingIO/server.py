@@ -21,9 +21,9 @@ import asyncio
 
 logger = logging.getLogger('RW-Server')
 
-class ActorOpenAI(Actor, RoadworkActorInterface):
+class ActorOpenAIMachineTeachingIO(Actor, RoadworkActorInterface):
     def __init__(self, ctx, actor_id):
-        super(ActorOpenAI, self).__init__(ctx, actor_id)
+        super(ActorOpenAIMachineTeachingIO, self).__init__(ctx, actor_id)
         self.env = None # Placeholder
         self.actor_id = actor_id
 
