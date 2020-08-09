@@ -1,3 +1,20 @@
+# Persistent Volume Claim for output files
+# More Info: https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
+# Note: will be made available through kubectl get pvc
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-rw-output
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: azurefile
+
+---
+# Simulation Cluster Deployment
 apiVersion: apps/v1
 kind: Deployment # Create Dapr Deployment, will automatically have 2 pods (described below + daprd)
 metadata:
@@ -27,3 +44,10 @@ spec:
         env:
         - name: PYTHONUNBUFFERED
           value: "1"
+        volumeMounts:
+        - mountPath: "/mnt/rw-output"
+          name: volume-rw-output
+      volumes:
+        - name: volume-rw-output
+          persistentVolumeClaim:
+            claimName: pvc-rw-output

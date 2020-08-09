@@ -20,7 +20,7 @@ RUN apt-get update \
        dos2unix
 
 # Output Dir
-RUN mkdir -p /mnt/output-server
+RUN mkdir -p /mnt/rw-output
 
 # Upgrade pip
 RUN /usr/bin/python3 -m pip install --upgrade pip
